@@ -4,7 +4,7 @@ const axios = require ("axios");
 
 
 //To get Articles
-router.get("/books", (req, res) => {
+router.get("/", (req, res) => {
 
   // variables for NYT API
   

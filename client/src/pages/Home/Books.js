@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import DeleteBtn from "../../components/DeleteBtn";
 import SaveBtn from "../../components/SaveBtn"
 import Jumbotron from "../../components/Jumbotron";
+import Results from "../../components/Results";
 import API from "../../utils/API";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { Col, Row, Container } from "../../components/Grid";
 import { List, ListItem } from "../../components/List";
 import { Input, FormBtn } from "../../components/Form";
@@ -20,10 +21,6 @@ class Home extends Component {
     begin: "",
     end: "",
   };
-
-  componentDidMount() {
-    this.loadBooks();
-  }
 
   //Method for retrieving saved 'Articles' from DB
   loadBooks = () => {
@@ -44,7 +41,7 @@ class Home extends Component {
   //For handling topic in Input field
   handleInputChange = event => {
     this.setState({
-      query: event.target.value 
+      query: event.target.value
     });
   }
 
@@ -70,8 +67,8 @@ class Home extends Component {
       begin: this.state.begin,
       end: this.state.end
     })
-    .then(res => this.loadBooks())
-    .catch(err => console.log(err));
+      .then(res => this.loadBooks())
+      .catch(err => console.log(err));
   }
 
 
@@ -80,24 +77,29 @@ class Home extends Component {
     event.preventDefault();
     API.getBooks(this.state.query, this.state.begin, this.state.end)
       .then(res => {
-        this.setState({ 
-          books: res.data.response });
+        this.setState({
+          books: res.data.response
+        });
       })
       .catch(err => console.log(err));
-    };
+  };
 
-    // handleFormSubmit = event => {
-    //   event.preventDefault();
-    //   if (this.state.title && this.state.author) {
-    //     API.saveBook({
-    //       title: this.state.title,
-    //       author: this.state.author,
-    //       synopsis: this.state.synopsis
-    //     })
-    //       .then(res => this.loadBooks())
-    //       .catch(err => console.log(err));
-    //   }
-    // };
+  componentDidMount() {
+    this.loadBooks();
+  }
+
+  // handleFormSubmit = event => {
+  //   event.preventDefault();
+  //   if (this.state.title && this.state.author) {
+  //     API.saveBook({
+  //       title: this.state.title,
+  //       author: this.state.author,
+  //       synopsis: this.state.synopsis
+  //     })
+  //       .then(res => this.loadBooks())
+  //       .catch(err => console.log(err));
+  //   }
+  // };
 
 
 
@@ -132,7 +134,7 @@ class Home extends Component {
                 name="end-year"
                 placeholder="YYYY"
               />
-              
+
               <FormBtn
                 disabled={!(this.state.query)}
                 onClick={this.handleFormSubmit}
@@ -143,30 +145,26 @@ class Home extends Component {
           </Col>
 
           <Col size="md-6 sm-12">
-            <Jumbotron>
-              <h1>Saved Articles</h1>
-            </Jumbotron>
-            {this.state.books}
+            <Results>
               <List>
                 {this.state.books.map(book => {
                   return (
-                  <ListItem 
-                    _id={book._id}
-                    key={book._id}
-                    title={book.headline.main}
-                    date= {book.pub_date}
-                    url= {book.web_url}
-                    />
-                  )}
-                )};
-                   
-                    <SaveBtn onClick={() => this.handleSave()} />
-                    <DeleteBtn onClick={() => this.deleteBook()} />
-                
+                    <ListItem
+                      _id={book._id}
+                      key={book._id}
+                      title={book.headline.main}
+                      date={book.pub_date}
+                      url={book.web_url}
+                    >
+
+                <SaveBtn onClick={() => this.handleSave()} />
+                <DeleteBtn onClick={() => this.deleteBook()} />
+                    </ListItem>
+                  )
+                })}
+
               </List>
-              <Jumbotron>
-              <h1>Results</h1>
-              </Jumbotron>
+            </Results>
           </Col>
         </Row>
       </Container>

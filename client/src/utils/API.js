@@ -1,10 +1,26 @@
 import axios from "axios";
 
+
 export default {
-  // Gets all books
-  getBooks: function() {
-    return axios.get("/api/books");
+
+  getBooks: function(query, begin_date, end_date) {
+    // Get request
+    return axios.get("/api/books", 
+    	{ params: 
+    		{ 
+    			query: query,
+    			begin_date: begin_date,
+    			end_date: end_date
+    		}
+    	}
+    );
   },
+
+  // Gets all books
+  // getBooks: function() {
+  //   return axios.get("/api/books")
+  //   ;
+  // },
   // Gets the book with the given id
   getBook: function(id) {
     return axios.get("/api/books/" + id);
