@@ -3,6 +3,7 @@ import DeleteBtn from "../../components/DeleteBtn";
 import SaveBtn from "../../components/SaveBtn"
 import Jumbotron from "../../components/Jumbotron";
 import Results from "../../components/Results";
+import Saved from "../../components/Saved";
 import API from "../../utils/API";
 // import { Link } from "react-router-dom";
 import { Col, Row, Container } from "../../components/Grid";
@@ -22,9 +23,12 @@ class Home extends Component {
     end: "",
   };
 
+  componentDidMount() {
+  }
+
   //Method for retrieving saved 'Articles' from DB
   loadBooks = () => {
-    API.getBooks()
+    API.getBooks(this.state.query, this.state.begin, this.state.end)
       .then(res =>
         this.setState({ books: res.data })
       )
@@ -39,7 +43,7 @@ class Home extends Component {
   };
 
   //For handling topic in Input field
-  handleInputChange = event => {
+  handleInputChange = (event) => {
     this.setState({
       query: event.target.value
     });
@@ -63,7 +67,6 @@ class Home extends Component {
   handleSave = id => {
     API.saveBook({
       title: this.state.title,
-      author: this.state.author,
       begin: this.state.begin,
       end: this.state.end
     })
@@ -77,31 +80,14 @@ class Home extends Component {
     event.preventDefault();
     API.getBooks(this.state.query, this.state.begin, this.state.end)
       .then(res => {
+        console.log(res);
         this.setState({
-          books: res.data.response
+          books: res.data.response.docs
         });
+       console.log(this.state);
       })
       .catch(err => console.log(err));
   };
-
-  componentDidMount() {
-    this.loadBooks();
-  }
-
-  // handleFormSubmit = event => {
-  //   event.preventDefault();
-  //   if (this.state.title && this.state.author) {
-  //     API.saveBook({
-  //       title: this.state.title,
-  //       author: this.state.author,
-  //       synopsis: this.state.synopsis
-  //     })
-  //       .then(res => this.loadBooks())
-  //       .catch(err => console.log(err));
-  //   }
-  // };
-
-
 
   render() {
     return (
@@ -147,6 +133,7 @@ class Home extends Component {
           <Col size="md-6 sm-12">
             <Results>
               <List>
+               
                 {this.state.books.map(book => {
                   return (
                     <ListItem
@@ -155,19 +142,16 @@ class Home extends Component {
                       title={book.headline.main}
                       date={book.pub_date}
                       url={book.web_url}
-                    >
-
-                <SaveBtn onClick={() => this.handleSave()} />
-                <DeleteBtn onClick={() => this.deleteBook()} />
-                    </ListItem>
-                  )
+                    ></ListItem>
+                  );
                 })}
 
               </List>
             </Results>
+            <Saved></Saved>
           </Col>
         </Row>
-      </Container>
+      </Container >
     );
   }
 }
