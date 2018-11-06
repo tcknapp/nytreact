@@ -17,7 +17,10 @@ if(process.env.NODE_ENV == "production"){
   mongoose.connect('mongodb://heroku_crpnjvc5:oubp6mbsngqtc7fmm0i9b3a912@ds155718.mlab.com:55718/heroku_crpnjvc5');
 }
 else{
-  mongoose.connect('mongodb://localhost/nytreact')};
+  mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/nytreact", { useNewUrlParser: true })};
+
+// // Connect to the Mongo DB
+// mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/nytreact", { useNewUrlParser: true });
 
 
 // Add routes, both API and view
@@ -28,9 +31,6 @@ app.get("*", function(req, res) {
   res.sendFile(path.join(__dirname, "./client/build/index.html"));
 });
 
-
-// // Connect to the Mongo DB
-// mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/nytreact", { useNewUrlParser: true });
 
 // Start the API server
 app.listen(PORT, function() {
