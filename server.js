@@ -9,19 +9,18 @@ const PORT = process.env.PORT || 3001;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 // Serve up static assets (usually on heroku)
-// if (process.env.NODE_ENV === "production") {
-//   app.use(express.static("client/build"));
-// }
-
-if(process.env.NODE_ENV == "production"){
-  mongoose.connect('mongodb://heroku_crpnjvc5:oubp6mbsngqtc7fmm0i9b3a912@ds155718.mlab.com:55718/heroku_crpnjvc5');
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
 }
-else{
-  mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/nytreact", { useNewUrlParser: true })};
+
+// if(process.env.NODE_ENV == "production"){
+//   mongoose.connect('mongodb://heroku_crpnjvc5:oubp6mbsngqtc7fmm0i9b3a912@ds155718.mlab.com:55718/heroku_crpnjvc5');
+// }
+// else{
+//   mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/nytreact", { useNewUrlParser: true })};
 
 // // Connect to the Mongo DB
-// mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/nytreact", { useNewUrlParser: true });
-
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/nytreact");
 
 // Add routes, both API and view
 app.use(routes);
